@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      h2 {
+        color: #333;
+      }
+      section {
+        margin: 20px 0;
+      }
+      .disclaimer {
+        background-color: #f9f9f9;
+        padding: 10px;
+        font-size: 0.9em;
+      }
+      footer {
+        background-color: #f0f0f0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>US Avalanche Accidents Map Documentation</h1>
+      <section class="disclaimer">
+        <h2>Disclaimer</h2>
+        <p>
+          This project intends to contribute to the study of avalanches. No
+          money is being made from this. My heart goes out to the accident
+          victims and their loved ones. I aim to remember them by providing this
+          data visualization in hopes of eventually understanding enough about
+          avalanche accidents to prevent them - Kirk Islas
+        </p>
+      </section>
+    </header>
+    <main>
+      <section id="elt">
+        <h2>Data Pipeline (Extract, Load, Transform)</h2>
+        <p>
+          <strong>Description:</strong> This Data Pipeline automatically
+          extracts all data (if available) every 2 weeks from our public
+          <a href="https://avalanche.org/avalanche-accidents/" target="_blank"
+            >data source</a
+          >
+          and stores it in its rawest form within our 'accidents_bronze' table.
+          We then apply the necessary transformations to a copy of that and save
+          it into our 'accidents_silver' table; making our data ready for
+          visualization. Our 'log' table that gets written to during every run
+          comes in handy for auditing and debugging.
+        </p>
+        <p>
+          <strong
+            >Transformations Applied to Bronze Layer to create Silver
+            Layer:</strong
+          >
+        </p>
+        <ol>
+          <li>Remove cross symbols if they exist</li>
+          <li>Create complete date using partial date and season</li>
+          <li>Exclude summary tables from our 'accidents_silver'</li>
+          <li>Convert state abbreviations to full names</li>
+          <li>Refine location for geocoding locations</li>
+          <li>Geocode each location and state to obtain coordinates</li>
+        </ol>
+        <p>
+          <strong>Methodologies Used:</strong> ELT, Web Scraping, Automation,
+          Data Engineering, Medallion Architecture
+        </p>
+        <p>
+          <strong>Technologies Used:</strong> Python, PostgreSQL, Pandas,
+          SQLAlchemy, Google Maps API, Beautiful Soup 4, US, Datetime, Requests
+        </p>
+      </section>
+
+      <section id="backend">
+        <h2>Back End Web Server</h2>
+        <p>
+          <strong>Description:</strong> The back end server is designed to
+          connect to the 'avalanche_data' database to fetch all data from
+          'accidents_silver' and serve it to my frontend securely and
+          asynchronously upon request. This API contains features like caching,
+          CORS middleware, rate limiting, logging with rotation, security
+          headers, and custom exception handling.
+        </p>
+        <p><strong>API Endpoints and Their Use Cases:</strong></p>
+        <ol>
+          <li>
+            <strong>/api/accidents</strong>: Fetches all data from
+            'accidents_silver' and returns it to the front end
+          </li>
+          <li>
+            <strong>/api/accidents/{accident_id}</strong>: Fetches details about
+            specific accidents and returns it to the front end
+          </li>
+          <li>
+            <strong>/api/aws-credentials/</strong>: Fetches AWS Credentials
+            needed for map display and returns them to the front end
+          </li>
+          <li>
+            <strong>/api/invalidate-cache/</strong>: Clears out cache to ensure
+            fresh data is made available via trigger on successful data load
+            within ELT process
+          </li>
+        </ol>
+        <p>
+          <strong>Methodologies Used:</strong> Back End Development, API
+          Development, Asynchronous Programming
+        </p>
+        <p>
+          <strong>Technologies Used:</strong> Python, FastAPI, PostgreSQL,
+          Redis, SlowApi, Pydantic, Logging, Starlette
+        </p>
+      </section>
+
+      <section id="frontend">
+        <h2>Frontend</h2>
+        <p>
+          <strong>Description:</strong> The front end server is responsible for
+          making GET requests to our API endpoints to receive credentials and
+          data needed to successfully display the map with data.
+        </p>
+        <p>
+          <strong>Methodologies Used:</strong> Data Visualization, Front End
+          Development
+        </p>
+        <p>
+          <strong>Technologies Used:</strong> HTML, CSS, JavaScript, AWS
+          Location (Esri map display)
+        </p>
+      </section>
+    </main>
+    <footer>
+      <p>
+        Each deployed separately using
+        <a href="https://render.com" target="_blank">render.com</a>
+      </p>
+    </footer>
+  </body>
+</html>
